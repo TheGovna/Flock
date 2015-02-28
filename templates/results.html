@@ -5,7 +5,7 @@
 {% for business in businesses %}
 <li>
     <div class="business">
-        <h4><a href="{{ business['url'] }}">{{ business['name'] }}</a></h4>
+        <h4><a href="/invite/{{ business['id'] }}">{{ business['name'] }}</a></h4>
         {% for category in business['categories'] %}
         {{ category[0] }}{% if not loop.last %},{% endif %}
         {% endfor %}
