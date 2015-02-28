@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
     <h1>Invite Your Friends to {{ business_name }}!</h1>
-    <form action="">
+    <form action="/text/{{ business_name }}" method="post">
         {% for friend in friends %}
-            <input type="checkbox" name="friends" value="{{ friend['name'] }}">  {{ friend['name'] }}
+            <input type="checkbox" name="friend" value="{{ friend['name'] }}">  {{ friend['name'] }}
             <br>
 {#            <li>Friend: {{ friend['name'] }} Phone: {{ friend['phone'] }}</li>#}
         {% endfor %}
+        <input type="submit" value="Submit">
     </form>
 {% endblock %}

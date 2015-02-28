@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from twilio.rest import TwilioRestClient
 import urllib
 import requests
 import json
@@ -12,6 +13,12 @@ MONGODB_HOST = 'localhost'
 MONGODB_PORT = 27017
 DEBUG = True
 SECRET_KEY = 'development key'
+
+TWILIO_ACCOUNT_SID = "ACcdeba5687e73b2f0018fe8b7004e6fc8"
+TWILIO_AUTH_TOKEN = "1e389c71315f88b00945ed9499dea847"
+TWILIO_NUMBER = "5714512210"
+client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
 YELP_SEARCH_URL = 'http://api.yelp.com/v2/search'
 YELP_BUSINESS_URL = 'http://api.yelp.com/v2/business/'
 
@@ -23,8 +30,8 @@ connection = Connection(app.config['MONGODB_HOST'], app.config['MONGODB_PORT'])
 
 fakeFriends = {'friends': [
     {'name': 'Melissa Thai', 'email': 'thaimp@rose-hulman.edu', 'phone': '7038811188'},
-    {'name': 'Chris Budo', 'email': 'chris@rose-hulman.edu', 'phone': '1111111111'},
-    {'name': 'Jeremiah Goist', 'email': 'jeremiah@rose-hulman.edu', 'phone': '2222222222'},
+    {'name': 'Chris Budo', 'email': 'chris@rose-hulman.edu', 'phone': '5135442427'},
+    {'name': 'Jeremiah Goist', 'email': 'jeremiah@rose-hulman.edu', 'phone': '2539730487'},
     {'name': 'Brooke Brown', 'email': 'brooke@rose-hulman.edu', 'phone': '3333333333'}]
 }
 
@@ -93,8 +100,26 @@ def invite_friends(business_id):
     signed_url = sign_url(api_url)
     response = requests.get(signed_url)
     json_response = json.loads(response.text)
-    print(json_response)
+    # print(json_response)
     return render_template('invite.html', business_name=json_response['name'], friends=fakeFriends['friends'])
+
+def text_friend(business_name, friend_number):
+    message = client.messages.create(body="I would love to go to " + business_name + " with you!",
+    to=friend_number,    # Replace with your phone number
+    from_=TWILIO_NUMBER) # Replace with your Twilio number
+    return business_name + ", " + friend_number
+
+@app.route('/text/<business_name>', methods=['POST'])
+def text_checked_friends(business_name):
+    friends_to_text = request.form.getlist("friend")
+    print("FRIENDS TO TEXT:")
+    print(friends_to_text)
+    for friend_to_text in friends_to_text:
+        for friend in fakeFriends['friends']:
+            if friend_to_text == friend['name']:
+                print(friend['name'] + " " + friend['phone'])
+                text_friend(business_name, friend['phone'])
+                return render_template('index.html')
 
 def create_oauth_url(url):
     consumer = oauth.Consumer(app.config['OAUTH_CONSUMER_KEY'],
