@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ search_term }} - {{ location }}</h2>
+<ul class='entries'>
+{% for business in businesses %}
+<li>
+    <div class="business">
+        <h4><a href="{{ business['url'] }}">{{ business['name'] }}</a></h4>
+        {% for category in business['categories'] %}
+        {{ category[0] }}{% if not loop.last %},{% endif %}
+        {% endfor %}
+        <br />
+        {{ business['location']['display_address']|join(', ') }} <br />
+        {{ business['display_phone'] }} <br />
+        <img src="{{ business['rating_img_url'] }}" alt="{{ business['rating'] }}">
+        <form action="{{ url_for('save_entry') }}" method="POST" class="save-entry">
+            <input type="hidden" name="name" value="{{ business['name'] }}">
+            <input type="hidden" name="url" value="{{ business['url'] }}">
+            <input type="hidden" name="phone_number" value="{{ business['display_phone'] }}">
+            <input type="hidden" name="address" value="{{ business['location']['display_address']|join(', ') }}">
+            {% for category in business['categories'] %}
+            <input type="hidden" name="categories" value="{{ category[0] }}">
+            {% endfor %}
+{#            <input type="submit" value="Save">#}
+        </form>
+    </div>
+</li>
+{% endfor %}
+</ul>
+<a href="{{ url_for('index') }}">back</a>
+{% endblock %}

@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Yelper!</title>
+        <link rel="stylesheet" type="text/css" href="http://necolas.github.io/normalize.css/3.0.2/normalize.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.css">
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+
+{#        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">#}
+    </head>
+    <body>
+        <div class="page">
+            <h1>Yelper!</h1>
+            {% block content %}{% endblock %}
+{#            <img width='50px' height='50px' src="{{ url_for('static', filename='fork-knife.jpg') }}" />#}
+        </div>
+    </body>
+</html>
