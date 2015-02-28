@@ -32,7 +32,7 @@ fakeFriends = {'friends': [
     {'name': 'Melissa Thai', 'email': 'thaimp@rose-hulman.edu', 'phone': '7038811188'},
     {'name': 'Chris Budo', 'email': 'chris@rose-hulman.edu', 'phone': '5135442427'},
     {'name': 'Jeremiah Goist', 'email': 'jeremiah@rose-hulman.edu', 'phone': '2539730487'},
-    {'name': 'Brooke Brown', 'email': 'brooke@rose-hulman.edu', 'phone': '3333333333'}]
+    {'name': 'Brooke Brown', 'email': 'brooke@rose-hulman.edu', 'phone': '8122437113'}]
 }
 
 class Entry(Document):
@@ -119,7 +119,7 @@ def text_checked_friends(business_name):
             if friend_to_text == friend['name']:
                 print(friend['name'] + " " + friend['phone'])
                 text_friend(business_name, friend['phone'])
-                return render_template('index.html')
+    return render_template('index.html')
 
 def create_oauth_url(url):
     consumer = oauth.Consumer(app.config['OAUTH_CONSUMER_KEY'],
