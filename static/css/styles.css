@@ -149,3 +149,24 @@ label.css-label {
 #hill1 {
 	background: transparent url('../img/hill-with-windmill.png') 0 104px repeat-x;
 }
+
+#bird {
+	background: transparent url('../img/bird-forward-back.png') 0 0 no-repeat;
+	position: absolute;
+	top: 150px;
+	left: 65px;
+	width: 180px;
+	height: 123px;
+	z-index: 2000;
+	cursor: pointer;
+}
+#bird2 {
+	background: transparent url('../img/bird-forward-back-sm.png') 0 0 no-repeat;
+	position: absolute;
+	top: 70px;
+	left: 155px;
+	width: 140px;
+	height: 96px;
+	z-index: 1800;
+	cursor: pointer;
+}
