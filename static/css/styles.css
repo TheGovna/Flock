@@ -131,7 +131,7 @@ label.css-label {
 	user-select: none;
 }
 
-#invite-button {
+#invite-button, #add-friend-button {
     display: block;
     width: 600px;
 }
