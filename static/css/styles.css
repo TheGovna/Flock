@@ -124,3 +124,28 @@ label.css-label {
 #friends-container {
     margin: 20px 50px 50px 20px;
 }
+
+.stage {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	/*min-width: 900px;*/
+	height: 359px;
+	overflow: hidden;
+}
+#stage {
+	bottom: 0px;
+	left: 0px;
+	z-index: 100;
+}
+
+#clouds {
+	background: transparent url('../img/cloud.png') 305px 102px repeat-x;
+}
+#hill2 {
+	background: transparent url('../img/hill2.png') 0 258px repeat-x;
+}
+#hill1 {
+	background: transparent url('../img/hill-with-windmill.png') 0 104px repeat-x;
+}

@@ -18,6 +18,7 @@ MAILJET_ENDPOINT = "http://pebblewebultranuvo.azurewebsites.net/apis/jetjoin?"
 MAILJET_TOMAIL = "tomail="
 MAILJET_FROMMAIL = "fromMail=budocf@rose-hulman.edu"
 MAILJET_BUSINESS = "business="
+MAILJET_MESSAGE = "message="
 
 
 TWILIO_ACCOUNT_SID = "ACcdeba5687e73b2f0018fe8b7004e6fc8"
@@ -113,8 +114,8 @@ def invite_friends(business_id):
     # print(json_response)
     return render_template('invite.html', business_name=json_response['name'], business_id=json_response['id'], friends=fakeFriends['friends'])
 
-def text_friend(business_name, friend_number):
-    message = client.messages.create(body="I would love to go to " + business_name + " with you!",
+def text_friend(business_name, friend_number, message):
+    client.messages.create(body=message,
     to=friend_number,    # Replace with your phone number
     from_=TWILIO_NUMBER) # Replace with your Twilio number
     return business_name + ", " + friend_number
@@ -122,6 +123,8 @@ def text_friend(business_name, friend_number):
 @app.route('/notify/<business_id>/<business_name>', methods=['POST'])
 def notify_checked_friends(business_id, business_name):
     friends_to_text = request.form.getlist("friend")
+    message = request.form['message']
+    print(message)
     print("FRIENDS TO TEXT:")
     print(friends_to_text)
     for friend_to_text in friends_to_text:
@@ -131,9 +134,9 @@ def notify_checked_friends(business_id, business_name):
                 global MAILJET_BUSINESS
                 MAILJET_TOMAIL += friend['email']
                 MAILJET_BUSINESS += business_id
-                requests.post(MAILJET_ENDPOINT + MAILJET_TOMAIL + "&" + MAILJET_FROMMAIL + "&" + MAILJET_BUSINESS);
-                print(friend['name'] + " " + friend['phone'] + " " + MAILJET_ENDPOINT + MAILJET_TOMAIL + "&" + MAILJET_FROMMAIL + "&" + MAILJET_BUSINESS)
-                text_friend(business_name, friend['phone'])
+                requests.post(MAILJET_ENDPOINT + MAILJET_TOMAIL + "&" + MAILJET_FROMMAIL + "&" + MAILJET_BUSINESS + "&" + MAILJET_MESSAGE);
+                print(friend['name'] + " " + friend['phone'] + " " + MAILJET_ENDPOINT + MAILJET_TOMAIL + "&" + MAILJET_FROMMAIL + "&" + MAILJET_BUSINESS+ "&" + MAILJET_MESSAGE)
+                text_friend(business_name, friend['phone'], message)
     return redirect(url_for('index'))
 
 def create_oauth_url(url):

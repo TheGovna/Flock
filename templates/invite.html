@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>Invite Your Friends to {{ business_name }}!</h2>
     <div id="friends-container">
-        <form action="/notify/{{ business_id }}/{{ business_name }}" method="post">
+        <h3>Invite your friends to {{ business_name }}!</h3>
+        <form id="invite-friends-form" action="/notify/{{ business_id }}/{{ business_name }}" method="post">
             {% for friend in friends %}
                 <input class = "css-checkbox" type="checkbox" name="friend" id="{{ friend['name'] }}" value="{{ friend['name'] }}">  <label class="css-label" for="{{ friend['name'] }}">{{ friend['name'] }}</label>
                 <br>
             {% endfor %}
+
+            <h3>Send them a personalized message while you're at it</h3>
+            <textarea form="invite-friends-form" rows="4" cols="50" name="message" placeholder="I'd love for you to meet me at {{ business_name }} today!">
+            </textarea>
             <button class="blue-button" type="submit" value="Submit">Invite</button>
         </form>
     </div>
