@@ -1,42 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Search</h2>
-<form action="{{ url_for('yelp_search') }}" method="POST" class="search-box">
-    <input type="text" size="30" placeholder="Restaurants" name="term">
-    <input type="text" size="20" placeholder="Claremont" name="location">
-    <input type="submit" value="Search">
-</form>
-
-{#<h2>Saved</h2>#}
-{#<ul class='entries'>#}
-{#{% for business in saved_entries %}#}
-{#<li>#}
-{#    <div>#}
-{#        <h4 class='entry-title'><a href="{{ business['url'] }}">{{ business['name'] }}</a></h4>#}
-{#        <p class='entry-info'>{{ business['categories']|join(', ') }} <br />#}
-{#        {{ business['address'] }} <br />#}
-{#        {{ business['phone_number'] }} <br /></p>#}
-{#    </div>#}
-{#</li>#}
-{#{% else %}#}
-{#<p>You haven't saved anything yet.</p>#}
-{#{% endfor %}#}
-{#</ul>#}
-
+<div id="search-container">
+    <h2 id="search">Search</h2>
+    <form action="{{ url_for('yelp_search') }}" method="POST" class="search-box">
+    <input class="search-input float-left" type="text" size="30" placeholder="Restaurants" name="term">
+    <input class="search-input float-right" type="text" size="20" placeholder="Chicago" name="location">
+    <button class="blue-button" type="submit" value="Search">Search</button>
+    </form>
+</div>
 {% endblock %}
-
-{#<!DOCTYPE html>#}
-{#<html>#}
-{#<head lang="en">#}
-{#    <meta charset="UTF-8">#}
-{#    <title>Yelper</title>#}
-{#</head>#}
-{#<body>#}
-{#    <form method="POST">#}
-{#        Search for restaurant near this zip code:#}
-{#        <br>#}
-{#        <input type="text" name="zip">#}
-{#        <input type="submit" value="Submit">#}
-{#</form>#}
-{#</body>#}
-{#</html>#}

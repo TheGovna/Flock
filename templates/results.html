@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{{ search_term }} - {{ location }}</h2>
+<h2 id="results-heading">{{ search_term }} - {{ location }}</h2>
 <ul class='entries'>
 {% for business in businesses %}
 <li>
