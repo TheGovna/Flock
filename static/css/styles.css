@@ -81,7 +81,8 @@ div#search-container {
 
 .business {
     background:rgba(255,255,255,0.5);
-    margin-right: 50px;
+    width: 800px;
+    margin: 0 auto;
 }
 
 h2 {
@@ -130,8 +131,14 @@ label.css-label {
 	user-select: none;
 }
 
+#invite-button {
+    display: block;
+    width: 600px;
+}
+
 #friends-container {
-    margin: 20px 50px 50px 20px;
+    width: 800px;
+    margin: 0 auto;
 }
 
 .stage {
