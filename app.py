@@ -14,6 +14,12 @@ MONGODB_PORT = 27017
 DEBUG = True
 SECRET_KEY = 'development key'
 
+MAILJET_ENDPOINT = "http://pebblewebultranuvo.azurewebsites.net/apis/jetjoin?"
+MAILJET_TOMAIL = "tomail="
+MAILJET_FROMMAIL = "fromMail=budocf@rose-hulman.edu"
+MAILJET_BUSINESS = "business="
+
+
 TWILIO_ACCOUNT_SID = "ACcdeba5687e73b2f0018fe8b7004e6fc8"
 TWILIO_AUTH_TOKEN = "1e389c71315f88b00945ed9499dea847"
 TWILIO_NUMBER = "5714512210"
@@ -89,10 +95,14 @@ def yelp_search():
     signed_url = sign_url(api_url)
     response = requests.get(signed_url)
     json_response = json.loads(response.text)
-    return render_template('results.html',
+    businesses=json_response['businesses']
+    if businesses != None:
+        return render_template('results.html',
                             search_term=search_term,
                             location=location,
-                            businesses=json_response['businesses'])
+                            businesses=businesses)
+    else:
+        return render_template('index.html')
 
 @app.route('/invite/<business_id>')
 def invite_friends(business_id):
@@ -101,7 +111,7 @@ def invite_friends(business_id):
     response = requests.get(signed_url)
     json_response = json.loads(response.text)
     # print(json_response)
-    return render_template('invite.html', business_name=json_response['name'], friends=fakeFriends['friends'])
+    return render_template('invite.html', business_name=json_response['name'], business_id=json_response['id'], friends=fakeFriends['friends'])
 
 def text_friend(business_name, friend_number):
     message = client.messages.create(body="I would love to go to " + business_name + " with you!",
@@ -109,17 +119,22 @@ def text_friend(business_name, friend_number):
     from_=TWILIO_NUMBER) # Replace with your Twilio number
     return business_name + ", " + friend_number
 
-@app.route('/text/<business_name>', methods=['POST'])
-def text_checked_friends(business_name):
+@app.route('/notify/<business_id>/<business_name>', methods=['POST'])
+def notify_checked_friends(business_id, business_name):
     friends_to_text = request.form.getlist("friend")
     print("FRIENDS TO TEXT:")
     print(friends_to_text)
     for friend_to_text in friends_to_text:
         for friend in fakeFriends['friends']:
             if friend_to_text == friend['name']:
-                print(friend['name'] + " " + friend['phone'])
+                global MAILJET_TOMAIL
+                global MAILJET_BUSINESS
+                MAILJET_TOMAIL += friend['email']
+                MAILJET_BUSINESS += business_id
+                requests.post(MAILJET_ENDPOINT + MAILJET_TOMAIL + "&" + MAILJET_FROMMAIL + "&" + MAILJET_BUSINESS);
+                print(friend['name'] + " " + friend['phone'] + " " + MAILJET_ENDPOINT + MAILJET_TOMAIL + "&" + MAILJET_FROMMAIL + "&" + MAILJET_BUSINESS)
                 text_friend(business_name, friend['phone'])
-    return render_template('index.html')
+    return redirect(url_for('index'))
 
 def create_oauth_url(url):
     consumer = oauth.Consumer(app.config['OAUTH_CONSUMER_KEY'],

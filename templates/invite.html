@@ -2,7 +2,7 @@
 {% block content %}
     <h2>Invite Your Friends to {{ business_name }}!</h2>
     <div id="friends-container">
-        <form action="/text/{{ business_name }}" method="post">
+        <form action="/notify/{{ business_id }}/{{ business_name }}" method="post">
             {% for friend in friends %}
                 <input class = "css-checkbox" type="checkbox" name="friend" id="{{ friend['name'] }}" value="{{ friend['name'] }}">  <label class="css-label" for="{{ friend['name'] }}">{{ friend['name'] }}</label>
                 <br>
