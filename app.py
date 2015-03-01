@@ -1,13 +1,19 @@
-from flask import Flask, render_template, request, redirect, url_for
-from twilio.rest import TwilioRestClient
 import urllib
-import requests
 import json
 import datetime
-from oauth import sign_url
 
-from mongokit import Connection, Document, ObjectId
+from flask import Flask, render_template, request, redirect, url_for
+from twilio.rest import TwilioRestClient
+import requests
+from mongokit import Connection, Document
+
+from oauth import sign_url
 import oauth
+
+# from flask_oauth import OAuth
+
+FB_APP_ID = "651933081599911"
+FB_SECRET = "151718454294912f0926dcc4b9e4d489"
 
 MONGODB_HOST = 'localhost'
 MONGODB_PORT = 27017
@@ -19,7 +25,6 @@ MAILJET_TOMAIL = "tomail="
 MAILJET_FROMMAIL = "fromMail=budocf@rose-hulman.edu"
 MAILJET_BUSINESS = "business="
 MAILJET_MESSAGE = "message="
-
 
 TWILIO_ACCOUNT_SID = "ACcdeba5687e73b2f0018fe8b7004e6fc8"
 TWILIO_AUTH_TOKEN = "1e389c71315f88b00945ed9499dea847"
@@ -34,6 +39,18 @@ mostRecentlySelectedBusiness = None
 app = Flask(__name__)
 app.config.from_object(__name__)
 connection = Connection(app.config['MONGODB_HOST'], app.config['MONGODB_PORT'])
+
+# oauth = OAuth()
+
+# facebook = oauth.remote_app('facebook',
+#                             base_url='https://graph.facebook.com/',
+#                             request_token_url=None,
+#                             access_token_url='/oauth/access_token',
+#                             authorize_url='https://www.facebook.com/dialog/oauth',
+#                             consumer_key=FB_APP_ID,
+#                             consumer_secret=FB_SECRET,
+#                             request_token_params={'scope': 'email'}
+# )
 
 fakeFriends = {'friends': [
     {'name': 'Melissa Thai', 'email': 'thaimp@rose-hulman.edu', 'phone': '7038811188'},
@@ -68,7 +85,16 @@ collection = connection['squeak'].entries
 @app.route('/')
 def index():
     entries = list(collection.Entry.find())
+    # me = facebook.get('/me')
+    # print(me)
+    # return render_template('login.html', saved_entries=entries)
     return render_template('index.html', saved_entries=entries)
+
+# @app.route('/login')
+# def login():
+#     return facebook.authorize(callback=url_for('facebook_authorized',
+#                                                next=request.args.get('next') or request.referrer or None,
+#                                                _external=True))
 
 @app.route('/save', methods=['POST'])
 def save_entry():
@@ -113,6 +139,18 @@ def invite_friends(business_id):
     json_response = json.loads(response.text)
     # print(json_response)
     return render_template('invite.html', business_name=json_response['name'], business_id=json_response['id'], friends=fakeFriends['friends'])
+
+@app.route('/addfriend/<business_id>', methods=['POST'])
+def add_friend(business_id):
+    print("HERE!!!")
+    name = request.form['name']
+    email = request.form['email']
+    phone = request.form['phone']
+    all_friends = fakeFriends['friends']
+    all_friends.append({'name': name, 'email': email, 'phone': phone})
+    fakeFriends['friends'] = all_friends
+    print(fakeFriends['friends'])
+    return redirect(url_for('invite_friends', business_id=business_id))
 
 def text_friend(business_name, friend_number, message):
     client.messages.create(body=message,

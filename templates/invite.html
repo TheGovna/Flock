@@ -13,5 +13,13 @@
             </textarea>
             <button id= "invite-button" class="blue-button" type="submit" value="Submit">Invite!</button>
         </form>
+
+        <h3>Don't see who you're looking for? Add a friend here:</h3>
+        <form id="add-friend-form" action="/addfriend/{{ business_id }}" method="post">
+            <label for="name">Name:</label><input type="text" id="name" name="name" >
+            <label for="email">Email:</label><input type="text" id="email" name="email" >
+            <label for="phone">Phone:</label><input type="text" id="phone" name="phone" >
+            <button id= "add-friend-button" class="blue-button" type="submit" value="Submit">Add Friend!</button>
+        </form>
     </div>
 {% endblock %}
